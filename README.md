@@ -1,8 +1,8 @@
 
-## DALI Data Team Data Challenge
-Stanley Gao '24, March 2022
+## DALI Data Data Challenge 22X + 22S
+Stanley Gao '24, May 2022
 
-### Part 1: Describe the WIID dataset given with four visualizations and four short paragraphs.
+### Part 1: Describe the dataset given with three or more data visualizations. These can be maps, histograms, line graphs, combinations of those, or anything else. It can be a time-series, or an interactive plot.
 
 For many of the following visualizations, I prepared the dataset in several ways.
 First, I wrote a Python script that 'collapsed' the data: turning several observations of one country (over the course of several years) into one single observation, where each value was drawn from the most recent observation. This allowed me to collapse multi-year data down into cross-sectional data, which I could then visualize effectively. I needed this collapse script, instead of simply taking just observations from 2015, because not all countries reported their data in 2015 – nor 2016, 2017, 2010, or any year. To get a more complete dataset I used this collapse script.

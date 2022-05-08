@@ -33,7 +33,7 @@ Figure 2.2 suggests that per order, copiers bring in both the most net and the m
 
 Figure 2.3 suggests that over our entire dataset, the majority of our subcategories are profitable. As a company focusing on office supplies (Staples-esque, perhaps), this fits our business model. However, we can note that we do sell tables at a loss - both per order and overall. Recommendations to raise prices or lower costs of manufacture would be in order. Investigations into ways to improve profit margins would also benefit high gross revenue categories such as phones and chairs.
 
-It is also worth noting, I created a `year` variable and ran a couple visualizations by year (only transactions from 2017, etc.), but didn't find much significantly novel information. Omitted these visualizations for brevity, but they are in my STATA do-files.
+It is also worth noting, I created a `year` variable and ran a couple visualizations by year (only transactions from 2017, etc.), but didn't find much significantly novel information. I omitted these visualizations in this writeup for brevity, but they are in my STATA do-files.
 
 #### Visualization 3: Are we growing as a business?
 <img src=https://i.imgur.com/XbV2GlZ.png width=700 /> \
@@ -52,7 +52,7 @@ However, I found that over the years of data in this dataset, shipping rates rem
 
 This visualization counters my claim that people are becoming more impatient, as companies such as Amazon increase shipping speeds from 3-5 days, to 2-day, to same-day. This data shows that, from ~2014-2018 (the time range of our data), people generally have not changed their preferences. We back this claim up with rigorous statistical analysis. Using a linear regression in STATA, we find that:
 
-A one week increase in the date (proceeding one week into the future) statistically significantly (`n=209, t=-2.27, p=0.024`) decreases percentage of orders using the standard class shipping method by ` .0000537`, or `0.00537%`. The regression is below, and our code is provided in do-files.
+A one week increase in the date (proceeding one week into the future) statistically significantly (`n=209, t=-2.27, p=0.024`) decreases percentage of orders using the standard class shipping method by ` .0000537`, or `0.00537%`. The regression is below, and my code is provided in do-files.
 ![STATA regression of standard class shipping method on week.](https://i.imgur.com/dsCKaSe.png)
 
-While our findings were statistically significant at conventional alpha levels `0.1` and `0.05`, the economic significance is dubious. With a weekly decrease in standard shipping method selection of `0.00537%`, the predicted decrease over the course of a year is just `0.27924%`. This is not a large enough number to cause worry, especially given the small nature of our dataset, with only 209 weeks to observe. Further, our regression was performed using collapsed-by-week data instead of analyzing the dataset in full form, which could be a flaw in this model. Ultimately, I do not feel comfortable claiming that people are becoming more impatient.
+While my findings were statistically significant at conventional alpha levels `0.1` and `0.05`, the economic significance is dubious. With a weekly decrease in standard shipping method selection of `0.00537%`, the predicted decrease over the course of a year is just `0.27924%`. This is not a large enough number to cause worry, especially given the small nature of the dataset, with only 209 weeks of observation. Further, my regression was performed using collapsed-by-week data instead of analyzing the dataset in full form, which could be a flaw in this model. Ultimately, I do not feel comfortable claiming that people are becoming more impatient.

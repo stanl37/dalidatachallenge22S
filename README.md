@@ -1,33 +1,49 @@
 
+
 ## DALI Data Data Challenge 22X + 22S
 Stanley Gao '24, May 2022
 
 ### Part 1: Describe the dataset given with three or more data visualizations. These can be maps, histograms, line graphs, combinations of those, or anything else. It can be a time-series, or an interactive plot.
 
-For many of the following visualizations, I prepared the dataset in several ways.
-First, I wrote a Python script that 'collapsed' the data: turning several observations of one country (over the course of several years) into one single observation, where each value was drawn from the most recent observation. This allowed me to collapse multi-year data down into cross-sectional data, which I could then visualize effectively. I needed this collapse script, instead of simply taking just observations from 2015, because not all countries reported their data in 2015 – nor 2016, 2017, 2010, or any year. To get a more complete dataset I used this collapse script.
+For a few of the following visualizations, I created quick Python scripts to collapse and manipulate the data in a way that made it easier to model. For example, for Visualization 1, I used a Python script to sum sales figures by state. In Visualization 2, I used Python to sum, count, and find summary statistics (means and medians) for profit figures by sub-category. Both of these tasks could have been done in STATA; for Visualization 3, I used the `collapse` command in STATA instead of Python.
 
-To create these map visualizations, I used helper files from [here](https://www.stathelp.se/en/spmap_world_en.html). These files gave me the Mercator projection seen in the visualizations (a dataset of polygon coordinates for each country), and a file coordinating country names with polygon IDs. This ID file was not fully sufficient, so I had to manually correct for some countries – I created an additional lookup sheet, `DALI na_id_world mod.xlsx`, to handle this.
+I approached this data from the perspective of a consultant. Given this data, I wanted to create three (general categories of) visualizations that may aid company executives in their decision-making. I answer three critical questions:
 
+ 1. Who buys the most stuff?
+ 2. What stuff sells?
+ 3. Are we growing as a business?
 
-![GINI Coefficient Map made in STATA](https://i.imgur.com/CagRm3Q.png) 
-*Figure 1*: A world map (Mercator projection) of reported Gini coefficients by country (as %). Each country has the most up to date reported Gini coefficient provided in the WIID dataset: The latest country data varies from country to country, but ranges from 1977 to 2017. The Gini coefficient measures income or wealth equality within a nation ([source](https://en.wikipedia.org/wiki/Gini_coefficient)). A coefficient of zero represents perfect equality – where everyone has the same income, while a coefficient of one (here, represented as 100 since we are using %) expresses maximal inequality – for an incredibly large number of people, if only one person has all the income, the Gini coefficient will be very near one. I used STATA module `spmap` to create this visualization.
+#### Visualization 1: Who buys the most stuff?
+<img src=https://i.imgur.com/Z76OuYb.png width=700 /> \
+*Figure 1*: A map of the United States of total sales and profit figures, by state. Each state is colored based on the summation of all sales/all profits over all years of the dataset. I used STATA module `spmap` to create this visualization, and coordinate datafiles from [here](https://spot.colorado.edu/~jonathug/Jonathan_E._Hughes/Map_Files.html), as well as tutorials for `spmap` from [here](https://www.stathelp.se/en/spmap_world_en.html). 
 
+This visualization is important because it answers the question of **who buys the most stuff?** From these maps, we note that California, Texas, and New York provide high volumes of gross revenue, which we could attribute to high population counts, or perhaps regionalized interest in the products we sell. We also note that of these three states, Texas has produced a net loss over our data. Further investigation could reveal why: perhaps Texans purchases more low-margin items/items we sell at a loss than other states.
 
-![GDP PPP PC (2011 USD) made in STATA](https://i.imgur.com/dG5mZ42.png)
-*Figure 2*: A world map (Mercator projection) of Gross Domestic Product converted to international dollars (here, standardized as the U.S. Dollar in 2011) using Purchasing Power Parity rates, then divided by total population to achieve Per Capita figures. Each country has the most up to date GDP PPP PC 2011USD value provided in the WIID dataset: The latest country data varies from country to country, but ranges from 1977 to 2017. GDP PPP PC measures, roughly, economic productivity and standards of living between countries ([source](https://www.investopedia.com/updates/purchasing-power-parity-ppp/)). While GDP is not a perfect measure of economic productivity for a variety of reasons, we can observe certain connections to our previous visualization on Gini coefficients. For example, the wealthy United States has large income inequality, but equally/similarly wealthy western Europe has drastically lower income inequality. Potential reasons for this difference may include differences in policy (taxation, etc.). I used STATA module `spmap` to create this visualization.
+#### Visualization 2: What stuff sells?
+<img src=https://i.imgur.com/yXKQXqn.png width=550 /> \
+*Figure 2.1*: A bar graph, describing total order counts over the entire dataset, grouped by subcategory.
+<img src=https://i.imgur.com/mr0I0b1.png width=550 /> \
+*Figure 2.2*: A bar graph, describing net & gross revenue **per order** over the entire dataset, grouped by subcategory.
+<img src=https://i.imgur.com/VYAjr4X.png width=550 /> \
+*Figure 2.3*: A bar graph, describing total order volume over the entire dataset, grouped by subcategory.
 
+This visualization is important because it answers the question of **what stuff sells?** From Figure 2.1, we note that binders,  paper, and furnishings were ordered the most in our dataset. This highlights high-volume goods, which may be beneficial if per-unit profit margins are high (increasing sales, or increasing price-per-unit can result in major increases in profits), but could also be detrimental (high volume goods require high spending in shipping, handling, etc., which we could look to cut out in efforts to reduce labor costs).
 
-![Mean and Median Incomes (USD) made in STATA](https://i.imgur.com/ORJ7hZt.png)
-*Figure 3*: World maps (Mercator projection) of mean and median incomes scaled to US Dollars. Each country has the most up to date values provided in the WIID dataset, ranging from 1977 to 2017. From this visualization, we can see that Western countries – the United States, Canada, Australia, Western Europe, etc. have the highest mean and median incomes globally. We can connect this to our GDP PPP PC visualization, as we see many similarities. GDP measures economic productivity in a quantitative way; similarly, incomes can serve as another measure of "productivity" (not considering the faults of such a measurement system). I used STATA module `spmap` to create this visualization.
+Figure 2.2 suggests that per order, copiers bring in both the most net and the most gross revenue. If I was a consulting firm, I would recommend this company look into developing their copier inventory and supplier connections. I would also point out that many of our high gross revenue items, such as tables and bookcases are actually sold at a loss. This is detrimental to the firm's profitability. We also could note that copiers produce a significantly higher profit per order compared to other goods. This is not to be taken out of context, however, as...
 
-![STATA Regression of GDP PPP PC on OECD Status](https://i.imgur.com/6ZITaiu.png)
-*Figure 4*: A graph of Gross Domestic Product scaled using Purchasing power Parity rates, Per Capita on Organization for Economic Co-operation and Development Membership. Put simply, this is a visualization of a linear regression done to see if being a member of the OECD intergovernmental economic organization is associated with increased GDP PPP PC. The result of our t-test on the slope coefficient here generates a t-value of 87.86, and a p-value of <0.001, indicating strong statistical significance. This means there is a strong correlation between OECD membership and an increased GDP PPP Per Capita. However, it must be made clear that this does not imply causality. Richer countries may be in the OECD more often due to the nature of international organizations. NATO, for example, is comprised of the West's biggest nations for a reason. We should be very careful looking at this with causality. I used STATA regressions (`reg`) and graphing (`twoway`) to create this visualization.
-The regression is below.
-![Regression](https://i.imgur.com/GBfucf9.png)
+Figure 2.3 suggests that over our entire dataset, the majority of our subcategories are profitable. As a company focusing on office supplies (Staples-esque, perhaps), this fits our business model. However, we can note that we do sell tables at a loss - both per order and overall. Recommendations to raise prices or lower costs of manufacture would be in order. Investigations into ways to improve profit margins would also benefit high gross revenue categories such as phones and chairs.
 
+#### Visualization 3: Are we growing as a business?
+<img src=https://i.imgur.com/XbV2GlZ.png width=700 /> \
+*Figure 3*: A bar graph, describing order volume by week, alongside a 50 day moving average, and a linear line of best fit over the entire dataset.
+This visualization is important because it answers the question of **are we growing?** From this visualization, we note that cyclicity exists in our order volume. We see, by our 50-day moving average, that we generally trend upward in sales volume week by week through the year, with spikes in September (the start of school years, perhaps) and December (the holiday rush). Sales drop massively at the start of every year; this could warrant investigation. We also note, by the green linear fit, that this company's sales are growing steadily over time. This is a generally a good sign, however we may need to analyze competitors, market share, etc. for a fuller picture.
 
-### Part 2: Free-Form Model Training
+### Part 2: Free-Form Modeling
+
+profit, with x vars state (predict profit increases if we increase customers in a certain state, segment, category, subcategory, targeted marketing)
+https://towardsdatascience.com/learn-how-to-create-animated-graphs-in-python-fce780421afe
+animated pie chart: shipping choice, line graph (over the years, first class has become a much more chosen option, etc.)
+	- multivariable analysis including subcategory, etc.
 
 For this part of the data challenge I ran a multivariate linear regression on the WIID dataset using STATA's `areg`, trying to predict Gini coefficients based on inputs such as income group, EU status, OECD status, exchange rates to the US Dollar, GDP PPP Per Capita, and Population. I controlled for year effects and absorbed country fixed effects. While many of my controls were rejected by STATA for collinearity, the regression I ran resulted in an R-squared of 0.7238. I cannot provide a visualization of my multivariate regression because there is no way to represent it in 3D space given the number of controls I've included. However, an `outreg2` output is shown below.
 

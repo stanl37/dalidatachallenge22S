@@ -33,6 +33,8 @@ Figure 2.2 suggests that per order, copiers bring in both the most net and the m
 
 Figure 2.3 suggests that over our entire dataset, the majority of our subcategories are profitable. As a company focusing on office supplies (Staples-esque, perhaps), this fits our business model. However, we can note that we do sell tables at a loss - both per order and overall. Recommendations to raise prices or lower costs of manufacture would be in order. Investigations into ways to improve profit margins would also benefit high gross revenue categories such as phones and chairs.
 
+It is also worth noting, I created a `year` variable and ran a couple visualizations by year (only transactions from 2017, etc.), but didn't find much significantly novel information. Omitted these visualizations for brevity, but they are in my STATA do-files.
+
 #### Visualization 3: Are we growing as a business?
 <img src=https://i.imgur.com/XbV2GlZ.png width=700 /> \
 *Figure 3*: A bar graph, describing order volume by week, alongside a 50 day moving average, and a linear line of best fit over the entire dataset.
@@ -40,15 +42,17 @@ This visualization is important because it answers the question of **are we grow
 
 ### Part 2: Free-Form Modeling
 
-profit, with x vars state (predict profit increases if we increase customers in a certain state, segment, category, subcategory, targeted marketing)
-https://towardsdatascience.com/learn-how-to-create-animated-graphs-in-python-fce780421afe
-animated pie chart: shipping choice, line graph (over the years, first class has become a much more chosen option, etc.)
-	- multivariable analysis including subcategory, etc.
+For this part of the data challenge, I decided to use Python's `pandas`, `numpy`, and `matplotlib`. I had no previous experience with these libraries, and had to learn them from scratch for this application. As such, my code for this part of the challenge is not optimized nor is it likely the best solution. However, I hope this demonstrates my open-mindedness and ability to quickly learn new technologies on the fly.
 
-For this part of the data challenge I ran a multivariate linear regression on the WIID dataset using STATA's `areg`, trying to predict Gini coefficients based on inputs such as income group, EU status, OECD status, exchange rates to the US Dollar, GDP PPP Per Capita, and Population. I controlled for year effects and absorbed country fixed effects. While many of my controls were rejected by STATA for collinearity, the regression I ran resulted in an R-squared of 0.7238. I cannot provide a visualization of my multivariate regression because there is no way to represent it in 3D space given the number of controls I've included. However, an `outreg2` output is shown below.
+For this modelling challenge, my idea was to investigate shipping rates: answering the question, **are people becoming more impatient?** I wanted to look at changes in shipping rates over time, to find trends that may have been helpful to company administration. Claims such as, *"people are favoring same-day shipping more and more, so we should change our inventory handling strategy so people have to wait less for the products they want"* could have been made.
 
-![outreg2](https://i.imgur.com/MOoWqRB.png)
+However, I found that over the years of data in this dataset, shipping rates remained relatively constant:
+<img src=https://i.imgur.com/mdDRPMK.gif width=700/> \
+*Figure 4*: An animated multi-line graph, animated in `matplotlib`, showing the usage of the company's four available shipping options (First Class, Same Day, Second Class, and Standard Class) over time.
 
-This model attempts to predict a country's GINI coefficient, given its country's population, GDP, and exchange rate to the US Dollar. The coefficients of all three of our main independent variables are statistically significant. The coefficient to `exchangerate` tells us that for an additional increase in the ratio of foreign currency to US dollars (for example, 6 Chinese yuan to 1 USD becoming 7 Chinese yuan to 1 USD), the Gini coefficient is estimated to rise by 0.000227. And similarly, for every 2011 US Dollar increase in GDP PPP Per Capita, the Gini coefficient is estimated to rise by 0.000290. And finally, for every additional person added to a country's population, the Gini coefficient is estimated to rise by an incredibly small number.
+This visualization counters my claim that people are becoming more impatient, as companies such as Amazon increase shipping speeds from 3-5 days, to 2-day, to same-day. This data shows that, from ~2014-2018 (the time range of our data), people generally have not changed their preferences. We back this claim up with rigorous statistical analysis. Using a linear regression in STATA, we find that:
 
-All three coefficients are positive, which indicate that increasing exchange rates (having a currency that simply expresses value in greater numbers), GDP PPP PC, and population all increase the Gini coefficient – they all increase income inequality. While this association is interesting, we must make sure to avoid assuming causality. There are many third factors that may be impacting this data, and as such we have not fulfilled one of our crucial validity assumptions.
+A one week increase in the date (proceeding one week into the future) statistically significantly (`n=209, t=-2.27, p=0.024`) decreases percentage of orders using the standard class shipping method by ` .0000537`, or `0.00537%`. The regression is below, and our code is provided in do-files.
+![STATA regression of standard class shipping method on week.](https://i.imgur.com/dsCKaSe.png)
+
+While our findings were statistically significant at conventional alpha levels `0.1` and `0.05`, the economic significance is dubious. With a weekly decrease in standard shipping method selection of `0.00537%`, the predicted decrease over the course of a year is just `0.27924%`. This is not a large enough number to cause worry, especially given the small nature of our dataset, with only 209 weeks to observe. Further, our regression was performed using collapsed-by-week data instead of analyzing the dataset in full form, which could be a flaw in this model. Ultimately, I do not feel comfortable claiming that people are becoming more impatient.
